@@ -1,5 +1,5 @@
-# nach
+## nach
 
-Требования:
-PyQt5
-numpy
+Требования:<br>
+PyQt5<br>
+numpy<br>
