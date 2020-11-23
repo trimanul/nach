@@ -188,11 +188,11 @@ class SurveyWindow(QtWidgets.QMainWindow):
     
         hbox = QHBoxLayout()
         self.btn = QPushButton("Proceed")
-        self.default = QPushButton("Default")
+        self.final = QPushButton("Final")
         self.rand = QPushButton("Random")
 
         hbox.addWidget(self.btn)
-        hbox.addWidget(self.default)
+        hbox.addWidget(self.final)
         hbox.addWidget(self.rand)
 
         self.vbox.addLayout(hbox)
@@ -202,7 +202,7 @@ class SurveyWindow(QtWidgets.QMainWindow):
         self.win = DrawingWindow()
 
         self.btn.clicked.connect(self.buttonClicked)
-        self.default.clicked.connect(self.defaultClicked)
+        self.final.clicked.connect(self.finalClicked)
         self.rand.clicked.connect(self.randClicked)
 
         self.setCentralWidget(self.widget)
@@ -232,24 +232,27 @@ class SurveyWindow(QtWidgets.QMainWindow):
         self.win.initUI()
         self.win.show()
 
-    def defaultClicked(self):
-        self.Bxtxt.setText("80")
-        self.Bytxt.setText("55")
-        self.Bztxt.setText("25")
+    def finalClicked(self):
+        self.hide()
+        self.win.Bx = int(self.Bxtxt.text())
+        self.win.By = int(self.Bytxt.text())
+        self.win.Bz = int(self.Bztxt.text())
 
-        self.Cxtxt.setText("120")
-        self.Cytxt.setText("10")
-        self.Cztxt.setText("80")
+        self.win.Cx = int(self.Cxtxt.text())
+        self.win.Cy = int(self.Cytxt.text())
+        self.win.Cz = int(self.Cztxt.text())
 
-        self.Extxt.setText("180")
-        self.Eytxt.setText("80")
-        self.Eztxt.setText("70")
+        self.win.Ex = int(self.Extxt.text())
+        self.win.Ey = int(self.Eytxt.text())
+        self.win.Ez = int(self.Eztxt.text())
 
-        self.Fxtxt.setText("145")
-        self.Fytxt.setText("90")
-        self.Fztxt.setText("5")
-
-        self.widget.update()
+        self.win.Fx = int(self.Fxtxt.text())
+        self.win.Fy = int(self.Fytxt.text())
+        self.win.Fz = int(self.Fztxt.text())
+        self.win.initUI()
+        self.win.final()
+        self.win.show()
+        
 
     def randClicked(self):
             randBx = str(randint(70, 180))
@@ -363,6 +366,28 @@ class DrawingWindow(QtWidgets.QMainWindow):
         
         return dot
 
+    def final(self):
+        qp = QPainter(self.label.pixmap())
+        qp.begin(self.label)
+        qp.translate(self.ZERO)
+        font = QFont("ГОСТ тип А")
+        pen = QPen()
+        pen.setWidth(1)
+        qp.setFont(font)
+        while True:
+            code = self.solution.next_frame()
+            if not code:
+                self.solution.solution_queue.put("self.hide()\nsys.exit()")
+                self.widget.update()
+                qp.end()
+                break
+
+            exec(code)
+            self.widget.update()
+
+
+        qp.end()
+
         
 
     def buttonClicked(self):
@@ -371,12 +396,20 @@ class DrawingWindow(QtWidgets.QMainWindow):
         qp.translate(self.ZERO)
         font = QFont("ГОСТ тип А")
         pen = QPen()
-        pen.setWidth(3)
+        pen.setWidth(1)
         qp.setFont(font)
 
         code = self.solution.next_frame()
 
-        exec(code)
+        if not code:
+                self.solution.solution_queue.put("self.hide()\nsys.exit()")
+                code = self.solution.next_frame()
+                exec(code)
+                self.widget.update()
+                qp.end()
+
+        else:
+            exec(code)
 
         self.widget.update()
 

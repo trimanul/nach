@@ -1,6 +1,5 @@
 import queue
 from time import sleep
-
 class Solver(object):
 
     def __init__(self):
@@ -2630,42 +2629,5 @@ else:
                 return chunk
 
         else:
-                return "self.hide()\nsys.exit()"
+                return 0
 
-
-'''
-
-        code = """
-
-"""
-        self.solution_queue.put(code)
-
-        code = """
-if -(self.N9.y() / 4) > -(self.N10.y() / 4):
-        
-        pen.setWidth(2)  
-        pen.setColor(Qt.white)
-        qp.setPen(pen)
-        qp.drawLine(self.N7line[0], self.N7line[1])
-
-        pen.setWidth(2)
-        pen.setColor(Qt.black)
-        pen.setStyle(Qt.DashLine)
-        qp.setPen(pen)
-        qp.drawLine(self.N7line[0], self.N7line[1])
-else:
-        pen.setWidth(2)
-        pen.setColor(Qt.white)
-        qp.setPen(pen)
-        qp.drawLine(self.N8line[0], self.N8line[1])
-
-        pen.setWidth(2)
-        pen.setColor(Qt.black)
-        pen.setStyle(Qt.DashLine)
-        qp.setPen(pen)
-        qp.drawLine(self.N8line[0], self.N8line[1])
-"""
-        self.solution_queue.put(code)
-
-'''
-                
